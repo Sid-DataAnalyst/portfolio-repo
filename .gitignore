@@ -1,0 +1,20 @@
+# Power BI temp / lock files
+~$*.pbix
+*.pbix.bak
+*.pbix.lock
+
+# Excel temp / lock files
+~$*.xlsx
+~$*.xls
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Large exported PDFs/images you don't want tracked (uncomment if needed)
+# *.pdf
