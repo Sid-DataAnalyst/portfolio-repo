@@ -20,5 +20,4 @@ This repository contains three end-to-end Power BI portfolio projects, each with
 ## Contact
 
 - Email: damasvsid@gmail.com
-- Phone: +91-9036689328
-- LinkedIn: [linkedin.com/in/m-a-s-v-siddhartha-5495a3414](https://linkedin.com/in/m-a-s-v-siddhartha-5495a3414)
+- - LinkedIn: [linkedin.com/in/m-a-s-v-siddhartha-5495a3414](https://linkedin.com/in/m-a-s-v-siddhartha-5495a3414)
