@@ -1,0 +1,36 @@
+table Dim_Customer
+	lineageTag: 33118c3b-da2d-4b57-a64f-b3166f0be217
+
+	column customer_id
+		dataType: string
+		lineageTag: 4c21acdc-3599-43af-8b1f-480a6a995117
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Customer_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: e318bcdb-6705-4b4c-8cd4-cef7e254012b
+		summarizeBy: none
+		sourceColumn: Customer_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Customer = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = #"retail-orders_Jan2023-Dec2024",
+				  #"Choose columns" = Table.SelectColumns(Source, {"customer_id"}),
+				  #"Removed duplicates" = Table.Distinct(#"Choose columns", {"customer_id"}),
+				  #"Sorted rows" = Table.Sort(#"Removed duplicates", {{"customer_id", Order.Ascending}}),
+				  #"Added index" = Table.AddIndexColumn(#"Sorted rows", "Index", 1, 1, Int64.Type),
+				  #"Renamed columns" = Table.RenameColumns(#"Added index", {{"Index", "Customer_Key"}})
+				in
+				  #"Renamed columns"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,40 @@
+table 'Dim Products'
+	lineageTag: 2ec593ab-52dd-407d-8402-e758af33bd73
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: f4c6bca0-0766-4347-a391-acb07086441c
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: b0705da7-2525-4904-b868-05b1211516b2
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 9704e45f-a483-491c-96db-cf3d22df0a55
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Products' = m
+		mode: import
+		queryGroup: Curated
+		source =
+				let
+				  Source = #"T Products",
+				  #"Choose columns" = Table.SelectColumns(Source, {"ProductID", "ProductName", "Category"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,36 @@
+table 'Calculation group'
+	lineageTag: 986004a3-dcdf-4802-9d9e-4fb3f5b93909
+
+	calculationGroup
+
+		calculationItem Mtd =
+				
+				CALCULATE(
+				SELECTEDMEASURE(),
+				DATESMTD(DimDate[Date]))
+
+		calculationItem Ytd =
+				
+				CALCULATE(
+				SELECTEDMEASURE(),
+				DATESYTD('Fact Orderlines'[OrderDate])
+				)
+
+	column 'Calculation group column'
+		dataType: string
+		lineageTag: 8a724666-d8ba-4da6-b31a-c130b372f9af
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: 87053325-ae53-4cac-8f0f-cc8de5dcf240
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

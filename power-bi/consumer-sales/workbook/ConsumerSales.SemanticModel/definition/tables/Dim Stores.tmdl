@@ -1,0 +1,39 @@
+table 'Dim Stores'
+	lineageTag: b6a16c32-6466-4e69-a378-23a83d81da61
+
+	column StoreID
+		dataType: int64
+		formatString: 0
+		lineageTag: 9748aaf5-5fa1-4f4c-a7ec-f3f31e0b0663
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreName
+		dataType: string
+		lineageTag: 4cd95f6f-32e0-417b-acda-b70741210476
+		summarizeBy: none
+		sourceColumn: StoreName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: e03716fd-6483-48f4-9fbd-04d564782af2
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Stores' = m
+		mode: import
+		queryGroup: Curated
+		source =
+				let
+				  Source = #"T Stores"
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,42 @@
+model Model
+	culture: en-IN
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Bronze
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup Silver
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup Gold
+
+	annotation PBI_QueryGroupOrder = 0
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Messy_HR_Dataset_Detailed","Messy_HR_Dataset","Training_Data","Survey_Data","Department_Data","Employee_Data","HR_Data","Dim_Employee","Dim_Training","Dim_Survey","Dim_Department","Dim_Termination","Dim_Classification","Fact_HR","Employee_Classification","Employee_Termination","Fact_Training","Fact_Employee"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Dim_Employee
+ref table DateTableTemplate_1cd82f99-723e-4a56-89de-92ef3536663a
+ref table LocalDateTable_7345112a-3485-47ec-80f0-767b2e985338
+ref table Dim_Training
+ref table Dim_Department
+ref table Dim_Termination
+ref table Dim_Classification
+ref table Fact_Training
+ref table Fact_Employee
+ref table DimDate
+ref table _Meassure
+ref table LocalDateTable_d59a1567-f508-4eb9-9730-4bdef90bc8fb
+
+ref cultureInfo en-IN
+

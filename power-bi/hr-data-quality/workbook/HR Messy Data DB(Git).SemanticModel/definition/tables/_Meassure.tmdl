@@ -1,0 +1,54 @@
+table _Meassure
+	lineageTag: 48001e8a-ccc1-481a-86a6-ca4dace03184
+
+	measure 'No OF Employees' = DISTINCTCOUNT(Fact_Employee[Employee_ID])
+		formatString: 0
+		lineageTag: 8f5774b0-cfd2-4083-acbb-d5abfae3f489
+
+	measure 'Active Employees' =
+			CALCULATE(
+			    [No OF Employees]
+			    ,Fact_Employee[EmployeeStatus] ="ACTIVE")
+		formatString: 0
+		lineageTag: cbdd7779-86ac-4546-9d0f-b2f2df484582
+
+	measure 'Total Employee' = ```
+			
+			    CALCULATE(
+			        [No OF Employees],
+			    ALL()
+			    )
+			```
+		formatString: 0
+		lineageTag: a6c680d5-ff31-42a0-9d2a-ea77566b975e
+
+	measure 'Total Leavers' = ```
+			
+			    CALCULATE(
+			        [No OF Employees],
+			    Fact_Employee[EmployeeStatus] IN {"Terminated for Cause","Voluntarily Terminated" }
+			    )
+			```
+		formatString: 0
+		lineageTag: f08716bc-81c4-47dd-ae04-4e2f51afefe1
+
+	measure 'Total Attrition %' = DIVIDE([Total Leavers],[Total Employee])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 5cc2d23c-34f1-4dc9-9a5e-a3c4ef9b4a96
+
+	column Value
+		isHidden
+		formatString: 0
+		lineageTag: f35c3244-ff81-4c40-a206-c95a165d77aa
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Meassure = calculated
+		mode: import
+		source = {1}
+
+	annotation PBI_Id = 9746ca21078847bfb61d4408f695bc37
+

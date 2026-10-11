@@ -1,0 +1,36 @@
+table Dim_Category
+	lineageTag: 8cc0c7ac-27ae-4bac-902b-02d21d398f90
+
+	column category
+		dataType: string
+		lineageTag: 4a04e123-bd63-40c7-b4ee-2d8d8f4b2891
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: c8784ac8-7fb5-4eca-ac98-17388e9cdf08
+		summarizeBy: none
+		sourceColumn: Category_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Category = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = #"retail-orders_Jan2023-Dec2024",
+				  #"Choose columns" = Table.SelectColumns(Source, {"category"}),
+				  #"Removed duplicates" = Table.Distinct(#"Choose columns", {"category"}),
+				  #"Sorted rows" = Table.Sort(#"Removed duplicates", {{"category", Order.Ascending}}),
+				  #"Added index" = Table.AddIndexColumn(#"Sorted rows", "Index", 1, 1, Int64.Type),
+				  #"Renamed columns" = Table.RenameColumns(#"Added index", {{"Index", "Category_Key"}})
+				in
+				  #"Renamed columns"
+
+	annotation PBI_ResultType = Table
+

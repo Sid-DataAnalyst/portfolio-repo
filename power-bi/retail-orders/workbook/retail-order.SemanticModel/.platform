@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "retail-order"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2225d39d-2caf-44af-91f5-1e0f7424afdd"
+  }
+}

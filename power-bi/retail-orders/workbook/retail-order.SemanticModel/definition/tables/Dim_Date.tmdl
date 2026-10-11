@@ -1,0 +1,67 @@
+table Dim_Date
+	lineageTag: 0b460236-82a0-462d-a639-cdfd817d2b0f
+
+	column Date
+		formatString: dd-mm-yyyy
+		lineageTag: d1679887-0906-47a3-aa8b-154c4d9f4434
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: d74a4758-a3fd-43bc-8def-9fbf9b7ede7c
+			defaultHierarchy: LocalDateTable_3c1b1bf9-bad0-44bb-a42e-f8e0e1582980.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column MonthName = FORMAT(Dim_Date[Date], "MMM")
+		lineageTag: ddb0794e-57f0-4590-96f8-daf437f9cbc6
+		summarizeBy: none
+		sortByColumn: MonthNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNo = MONTH(Dim_Date[Date])
+		formatString: 0
+		lineageTag: 33309dd4-e445-408c-a1e4-9c143a63b73a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter = "Q" & QUARTER(Dim_Date[Date])
+		lineageTag: 9427e2c0-5bc4-4e44-8b79-3ade303755a6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth = FORMAT(Dim_Date[Date], "yyyy-MM")
+		lineageTag: b43f22c1-ab15-44f8-89b4-898870b4ed54
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonthSort = YEAR(Dim_Date[Date]) * 100 + MONTH(Dim_Date[Date])
+		formatString: 0
+		lineageTag: 2a697ebf-9d96-41e1-a7a4-d54b3eab5ad2
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year = YEAR(Dim_Date[Date])
+		formatString: 0
+		lineageTag: a2ce7956-ade2-4f7a-9aa2-db9a71872850
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Date = calculated
+		mode: import
+		source = CALENDAR("01-01-2023","31-12-2024")
+
+	annotation PBI_Id = 8ffb05fd9c634e77a70b001626cd6c8e
+

@@ -1,0 +1,71 @@
+table Dim_Classification
+	lineageTag: 803bcd37-85ff-4b0e-977a-144746283578
+
+	column Clasification_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: c6389f9f-8c22-473b-afc5-fc7e64482b10
+		summarizeBy: none
+		sourceColumn: Clasification_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Title
+		dataType: string
+		lineageTag: 5cdb382b-f8ca-4dd3-91fd-5cf24e762e21
+		summarizeBy: none
+		sourceColumn: Title
+
+		annotation SummarizationSetBy = Automatic
+
+	column BusinessUnit
+		dataType: string
+		lineageTag: 8f8a29cd-7874-4442-940a-00cd71afc015
+		summarizeBy: none
+		sourceColumn: BusinessUnit
+
+		annotation SummarizationSetBy = Automatic
+
+	column Supervisor
+		dataType: string
+		lineageTag: 718389e5-ad4f-4386-85ae-f378867da6b3
+		summarizeBy: none
+		sourceColumn: Supervisor
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeType
+		dataType: string
+		lineageTag: bafe76fa-fef7-433e-ae67-f3b5133b9e96
+		summarizeBy: none
+		sourceColumn: EmployeeType
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeClassificationType
+		dataType: string
+		lineageTag: 38ea3884-477e-4108-a2d1-81769ee508b6
+		summarizeBy: none
+		sourceColumn: EmployeeClassificationType
+
+		annotation SummarizationSetBy = Automatic
+
+	column PayZone
+		dataType: string
+		lineageTag: 9f5f69a3-fc17-4c8b-98c6-2f57c364e326
+		summarizeBy: none
+		sourceColumn: PayZone
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Classification = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = Employee_Classification
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

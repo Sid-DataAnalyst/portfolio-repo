@@ -1,0 +1,25 @@
+relationship AutoDetected_bf2fa415-c1e3-447e-8edb-0902a64869d7
+	fromColumn: Fact_OrderLines.Customer_Key
+	toColumn: Dim_Customer.Customer_Key
+
+relationship AutoDetected_1c65eeee-c0f8-465c-8485-0e46001a87ca
+	fromColumn: Fact_OrderLines.Channel_Key
+	toColumn: Dim_Channel.Channel_Key
+
+relationship AutoDetected_481c3aab-205b-40d9-b043-e2740b152e57
+	fromColumn: Fact_OrderLines.Country_Key
+	toColumn: Dim_Location.Country_Key
+
+relationship AutoDetected_c32678b0-77e0-4f83-9e62-ea1f66a1e76b
+	fromColumn: Fact_OrderLines.Category_Key
+	toColumn: Dim_Category.Category_Key
+
+relationship d74a4758-a3fd-43bc-8def-9fbf9b7ede7c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Date.Date
+	toColumn: LocalDateTable_3c1b1bf9-bad0-44bb-a42e-f8e0e1582980.Date
+
+relationship 0e844994-434b-16d7-319d-c7193b387601
+	fromColumn: Fact_OrderLines.ordered_at
+	toColumn: Dim_Date.Date
+

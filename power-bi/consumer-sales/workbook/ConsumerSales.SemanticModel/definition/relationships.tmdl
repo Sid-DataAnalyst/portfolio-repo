@@ -1,0 +1,39 @@
+relationship AutoDetected_c74b5109-5bf3-44fa-94ff-ff9184c9ba1e
+	fromColumn: 'Fact MonthlyTargets'.StoreID
+	toColumn: 'Dim Stores'.StoreID
+
+relationship AutoDetected_a5b55d5e-21a5-47f5-9124-2688a98d5e45
+	fromColumn: 'Fact Orderlines'.StoreID
+	toColumn: 'Dim Stores'.StoreID
+
+relationship AutoDetected_93e8b978-9284-42aa-9d2f-d2469a25fbd9
+	fromColumn: 'Fact Orderlines'.CustomerID
+	toColumn: 'Dim Customer'.CustomerID
+
+relationship AutoDetected_e161e9c3-c11c-450d-8298-f17182e0fab9
+	fromColumn: 'Fact Orderlines'.ProductID
+	toColumn: 'Dim Products'.ProductID
+
+relationship bd1b1183-140d-47e1-8e8b-e686f1def66a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimDate.Date
+	toColumn: LocalDateTable_dd6b58f1-42a7-45ac-9c51-84b39e3edf14.Date
+
+relationship 241afe46-84e4-4c91-311d-65e7225cb30b
+	fromColumn: 'Fact MonthlyTargets'.TargetMonth
+	toColumn: DimDate.Date
+
+relationship e6b3d805-664c-a609-c237-7601ef46ec81
+	fromColumn: 'Fact Orderlines'.OrderDate
+	toColumn: DimDate.Date
+
+relationship cfe68aa6-f2b3-ac93-4be6-bee1863b0a6e
+	isActive: false
+	fromColumn: 'Fact Orderlines'.PromisedDate
+	toColumn: DimDate.Date
+
+relationship d58266d1-db9b-df52-7ee4-5d6a0a45f6f9
+	isActive: false
+	fromColumn: 'Fact Orderlines'.DeliveredDate
+	toColumn: DimDate.Date
+

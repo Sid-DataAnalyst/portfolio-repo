@@ -1,0 +1,31 @@
+table Zone
+	lineageTag: f5420774-0e15-440d-9559-0a3dea3d294b
+
+	column State
+		dataType: string
+		lineageTag: 6e19b669-1098-4b73-9d28-0fb31a1ec862
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column ZONE
+		dataType: string
+		lineageTag: 85ec2091-8197-4561-bcbd-9e42cc8e3752
+		summarizeBy: none
+		sourceColumn: ZONE
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Zone = m
+		mode: import
+		queryGroup: Silver
+		source =
+				let
+				  Source = #"Daily Sales",
+				  #"Choose columns" = Table.SelectColumns(Source, {"State", "ZONE"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

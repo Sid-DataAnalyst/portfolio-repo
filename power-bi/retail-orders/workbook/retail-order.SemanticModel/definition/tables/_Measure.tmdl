@@ -1,0 +1,66 @@
+table _Measure
+	lineageTag: 8bb18353-5bf7-4b20-aecd-1cddd1fcd608
+
+	measure TotalRevenue = SUM(Fact_OrderLines[revenue_usd])
+		lineageTag: 0b667a70-496b-4ace-baf9-59ffb37337f5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure NoOfUnits = SUM(Fact_OrderLines[units])
+		formatString: 0
+		lineageTag: 3cdfa9dc-76c6-43ff-ab23-fd7d56c502ee
+
+	measure UnitCost = SUM(Fact_OrderLines[unit_price_usd])
+		lineageTag: 1ca25d8e-6717-4774-afae-a19079c56898
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure RevnueActual = ```
+			
+			  CALCULATE(  [TotalRevenue], Fact_OrderLines[returned] = FALSE())
+			    
+			    
+			```
+		formatString: 0
+		lineageTag: ac41a923-1cff-43ca-9070-69735fe30d99
+
+	measure RevnueReturned =
+			
+			CALCULATE([TotalRevenue],
+			Fact_OrderLines[returned] = TRUE()
+			)
+		formatString: 0
+		lineageTag: 63ba2097-1a85-472e-8cfb-9c70e32fac74
+
+	measure NoOFOrders = DISTINCTCOUNT(Fact_OrderLines[order_id])
+		formatString: 0
+		lineageTag: 317d8b9b-1ccd-439a-a83f-b7c60a0ef9ac
+
+	measure OrdersReturned =
+			
+			CALCULATE([NoOFOrders],
+			Fact_OrderLines[returned] = TRUE()
+			)
+		formatString: 0
+		lineageTag: 190a4ff2-b9ce-459a-9573-18b8836fadff
+
+	measure ReturnOrder% = DIVIDE([OrdersReturned],[NoOFOrders])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 1d456e9d-dbf5-4bcd-9570-9e3fd4b31d84
+
+	column Value
+		isHidden
+		formatString: 0
+		lineageTag: c9117410-79e1-437d-9786-9a05cbb74f79
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measure = calculated
+		mode: import
+		source = {1}
+
+	annotation PBI_Id = 39e6c42627a14440badcf4dab6346fd5
+

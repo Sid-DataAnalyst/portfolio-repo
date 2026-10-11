@@ -1,0 +1,34 @@
+model Model
+	culture: en-IN
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Bronz
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Silver
+
+	annotation PBI_QueryGroupOrder = 1
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Daily Sales All","Daily Sales Raw","Daily Sales","Customer","Zone","Plant"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'Daily Sales'
+ref table DateTableTemplate_e5384edc-6413-4537-b15a-94c1a628aa7b
+ref table LocalDateTable_3a6ee5ab-0aa5-46ed-a6f5-e24726c16097
+ref table LocalDateTable_3ca62d9c-a581-499c-8d1b-4a53554e7d8a
+ref table LocalDateTable_22584eb8-612f-4694-8c98-797116c9575c
+ref table Customer
+ref table Zone
+ref table Plant
+
+ref cultureInfo en-IN
+

@@ -16,5 +16,19 @@ desktop.ini
 .vscode/
 .idea/
 
+# Power BI local caches, settings, and recovery files
+**/.pbi/
+*.abf
+*.tmp
+*.bak
+
+# Tableau recovery files
+*.twbr
+
+# Local credentials and configuration
+.env
+.env.*
+!.env.example
+
 # Large exported PDFs/images you don't want tracked (uncomment if needed)
 # *.pdf

@@ -1,0 +1,89 @@
+table _m
+	lineageTag: 2d37a928-b69a-45e9-9989-0a9daa676799
+
+	measure 'Total Revenue' =
+			
+			CALCULATE(
+			SUM('Fact Orderlines'[Revenue]),
+			'Fact Orderlines'[Status] = "Completed")
+		displayFolder: Base Measures
+		lineageTag: 41ef7483-2147-46de-83f3-c555d947358c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Target Revenue' = SUM('Fact MonthlyTargets'[TargetRevenue])
+		displayFolder: Target Revenue
+		lineageTag: 0ac695bc-60ab-4b6a-873d-0870486e40c7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Delta' = [Total Revenue] - [Target Revenue]
+		displayFolder: Target Revenue
+		lineageTag: 2bdb7b8e-4f5e-4e90-8726-c3258b0aa322
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Actual Vs Target %' =
+			
+			DIVIDE(
+			    [Total Revenue],
+			    [Target Revenue]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Target Revenue
+		lineageTag: bc5a73d5-be6b-4537-9652-a3c1c6bbb73a
+
+	measure 'Total Qty' =
+			CALCULATE(
+			    SUM('Fact Orderlines'[Quantity]),
+			    'Fact Orderlines'[Status] = "Completed"
+			)
+		formatString: 0
+		displayFolder: Base Measures
+		lineageTag: 0b038504-a4df-4b4b-b1c6-3f249bcdf32a
+
+	measure 'Revenue Variance %' =
+			
+			DIVIDE(
+			    [Revenue Delta],
+			    [Target Revenue]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Target Revenue
+		lineageTag: 58860603-3ab3-4fcf-ad83-fa62bdccaa92
+
+	measure 'Total Cost' =
+			
+			CALCULATE(
+			SUM('Fact Orderlines'[Cost]),
+			'Fact Orderlines'[Status] = "Completed"
+			)
+		displayFolder: Base Measures
+		lineageTag: 562c79d7-8634-4ac3-a67b-e84c889dd395
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Profit' = [Total Revenue] - [Total Cost]
+		displayFolder: Base Measures
+		lineageTag: ea7cb29a-0242-415d-9cd4-df44469167f7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Profit% = DIVIDE( [Total Profit],[Total Revenue])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Base Measures
+		lineageTag: dd76d122-a54d-4480-a27d-112526f621d4
+
+	partition _m = m
+		mode: import
+		queryGroup: Curated
+		source =
+				let
+				  Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMlSKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				  #"Changed column type" = Table.TransformColumnTypes(Source, {{"Column1", Int64.Type}}, "en-US"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed column type",{"Column1"})
+				in
+				  #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

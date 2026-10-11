@@ -1,0 +1,47 @@
+table 'Dim Customer'
+	lineageTag: c7fc7fd3-d185-470d-874a-ab79a206d5a9
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 06003aa1-61f0-4813-a4c7-339ec48be0f6
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerName
+		dataType: string
+		lineageTag: c2559d0b-bcb3-4ef9-86a7-c05e0a9d0af6
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: e141ed15-5d09-41f6-90de-99ec8b74859e
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: 08ac045f-8124-4368-a53c-a5b4d3e07728
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Customer' = m
+		mode: import
+		queryGroup: Curated
+		source =
+				let
+				  Source = #"T Customer"
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

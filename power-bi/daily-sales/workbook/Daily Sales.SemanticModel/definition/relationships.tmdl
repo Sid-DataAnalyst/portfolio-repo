@@ -1,0 +1,19 @@
+relationship d6a70e0b-9c05-434a-b17b-45d9f30bbc44
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Daily Sales'.'Invoice Date'
+	toColumn: LocalDateTable_3a6ee5ab-0aa5-46ed-a6f5-e24726c16097.Date
+
+relationship 4e2e39cc-d73b-4db3-a070-8469ba5da032
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Daily Sales'.'Order Date'
+	toColumn: LocalDateTable_3ca62d9c-a581-499c-8d1b-4a53554e7d8a.Date
+
+relationship 407ee4a5-2d55-4692-a563-0bd0f4f27bda
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Daily Sales'.Month
+	toColumn: LocalDateTable_22584eb8-612f-4694-8c98-797116c9575c.Date
+
+relationship AutoDetected_24aef1cc-e0de-4f7c-8d7c-1bbe5b5e385b
+	fromColumn: 'Daily Sales'.'Customer No'
+	toColumn: Customer.'Customer No'
+

@@ -1,0 +1,24 @@
+expression retail-orders_Jan2023-Dec2024 =
+		let
+		  Source = Csv.Document(File.Contents("G:\Datasets\E-Commerce\CSV, Excel and Text\E-Commerce Orders and Returns\retail-orders_Jan2023-Dec2024.csv"), [Delimiter = ",", Columns = 12, QuoteStyle = QuoteStyle.None]),
+		  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"order_id", type text}, {"line_no", Int64.Type}, {"ordered_at", type datetime}, {"customer_id", type text}, {"channel", type text}, {"country", type text}, {"category", type text}, {"units", Int64.Type}, {"unit_price_usd", type number}, {"discount_pct", type number}, {"revenue_usd", type number}, {"returned", type logical}}, "en-US"),
+		  #"Sorted rows" = Table.Sort(#"Changed column type", {{"order_id", Order.Ascending}, {"line_no", Order.Ascending}})
+		in
+		  #"Sorted rows"
+	lineageTag: 126073d8-11a7-40e7-bffc-34f338aa313b
+	queryGroup: Bronze
+
+	annotation PBI_ResultType = Table
+
+expression Fact_Orders =
+		let
+		  Source = Fact_OrderLines,
+		  #"Grouped rows" = Table.Group(Source, {"order_id"}, {{"Ordered_Date", each List.Max([ordered_at]), type nullable datetime}, {"Units", each List.Sum([units]), type nullable number}, {"Unit_Price_Usd", each List.Sum([unit_price_usd]), type nullable number}, {"Discount_Pct", each List.Average([discount_pct]), type nullable number}, {"Revenue_Usd", each List.Sum([revenue_usd]), type nullable number}, {"Customer_Key", each List.Max([Customer_Key]), type nullable Int64.Type}, {"Country_Key", each List.Max([Country_Key]), type nullable Int64.Type}, {"Channel_Key", each List.Max([Channel_Key]), type nullable Int64.Type}})
+		in
+		  #"Grouped rows"
+	lineageTag: fab10ab8-b649-4da8-8762-5e228f495753
+	queryGroup: Gold
+
+	annotation PBI_ResultType = Table
+

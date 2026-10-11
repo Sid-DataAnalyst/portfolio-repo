@@ -1,0 +1,159 @@
+table Fact_Employee
+	lineageTag: ea2c7397-5a40-4822-b9bf-c4424d85f80c
+
+	column Employee_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: deba1ce1-cdca-4923-84fe-fe069a60f00d
+		summarizeBy: none
+		sourceColumn: Employee_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 4480a2c1-8c2e-4210-ab3a-c9e1be8d8ba8
+		summarizeBy: none
+		sourceColumn: Department_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Termination_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7ab93d33-b113-4f90-b2c8-171ae51fbfd7
+		summarizeBy: none
+		sourceColumn: Termination_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clasification_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 654de18c-b3c7-4941-acf0-9b4e1e0affd6
+		summarizeBy: none
+		sourceColumn: Clasification_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Employee_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 348b77d1-1ca0-4f56-9b70-b3be7247cef1
+		summarizeBy: count
+		sourceColumn: Employee_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: ec3ba1eb-3c46-49b0-a92c-fbc26c910abe
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column EmployeeStatus
+		dataType: string
+		lineageTag: 1b5c384f-55e0-495f-bec7-3b6565817536
+		summarizeBy: none
+		sourceColumn: EmployeeStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExitDate
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 7798dfbd-3e26-487a-8bfb-90d73ca71a8f
+		summarizeBy: none
+		sourceColumn: ExitDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column JobFunctionDescription
+		dataType: string
+		lineageTag: dee8e04c-e1c6-4eeb-9d06-813be057ea87
+		summarizeBy: none
+		sourceColumn: JobFunctionDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column Performance_Score
+		dataType: string
+		lineageTag: 36674e66-ed58-4d7e-bfc8-614850f51505
+		summarizeBy: none
+		sourceColumn: Performance_Score
+
+		annotation SummarizationSetBy = Automatic
+
+	column Current_Employee_Rating
+		dataType: int64
+		formatString: 0
+		lineageTag: 99041bde-1bbe-487d-9147-91f7d71c5744
+		summarizeBy: sum
+		sourceColumn: Current_Employee_Rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column Survey_Date
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 6b24d651-e90d-4141-a2b5-9eda242aa231
+		summarizeBy: none
+		sourceColumn: Survey_Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Engagement_Score
+		dataType: int64
+		formatString: 0
+		lineageTag: 28ed16b7-607c-4f1e-b681-2dcefb7f74a2
+		summarizeBy: sum
+		sourceColumn: Engagement_Score
+
+		annotation SummarizationSetBy = Automatic
+
+	column Satisfaction_Score
+		dataType: int64
+		formatString: 0
+		lineageTag: d4c5ccfa-0ca7-44e7-afd4-fa3c554940a1
+		summarizeBy: sum
+		sourceColumn: Satisfaction_Score
+
+		annotation SummarizationSetBy = Automatic
+
+	column Work_Life_Balance_Score
+		dataType: int64
+		formatString: 0
+		lineageTag: e7fa3718-1b77-4f04-8a11-10ba239e13d6
+		summarizeBy: sum
+		sourceColumn: Work_Life_Balance_Score
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Employee = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = Fact_HR,
+				  #"Choose columns" = Table.SelectColumns(Source, {"Employee_Key", "Department_Key", "Termination_Key", "Clasification_Key", "Employee_ID", "StartDate", "EmployeeStatus", "ExitDate", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

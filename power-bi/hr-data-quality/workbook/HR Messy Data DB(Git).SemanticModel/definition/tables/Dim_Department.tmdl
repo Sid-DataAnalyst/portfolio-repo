@@ -1,0 +1,39 @@
+table Dim_Department
+	lineageTag: 7ff842dc-22c7-45d4-9cc6-0406435f59f4
+
+	column Department_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7029048c-2804-40e1-b093-04318d90f82a
+		summarizeBy: none
+		sourceColumn: Department_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column DepartmentType
+		dataType: string
+		lineageTag: 94301da6-65e3-488c-9765-91fb454da1bd
+		summarizeBy: none
+		sourceColumn: DepartmentType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Division
+		dataType: string
+		lineageTag: 344be6aa-31ba-4916-960f-373ac0118c89
+		summarizeBy: none
+		sourceColumn: Division
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Department = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = Department_Data
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+
