@@ -1,0 +1,154 @@
+table Fact_OrderLines
+	lineageTag: 7bb42961-b2d9-4a82-b427-74595e107098
+
+	column order_id
+		dataType: string
+		lineageTag: c4a81c79-5e9d-464c-b1fd-66cf79bed9e5
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column line_no
+		dataType: int64
+		formatString: 0
+		lineageTag: 5dec1cc2-0ce0-4b4f-84f7-2c0232c9f2f3
+		summarizeBy: sum
+		sourceColumn: line_no
+
+		annotation SummarizationSetBy = Automatic
+
+	column Customer_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 4aeede06-cd8e-45dd-ab66-eab0b721e7c8
+		summarizeBy: none
+		sourceColumn: Customer_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Channel_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 089ab7f8-afda-4451-b104-0624f57b3998
+		summarizeBy: none
+		sourceColumn: Channel_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: cb009927-10d4-4b97-9d9b-09307f1f647f
+		summarizeBy: none
+		sourceColumn: Category_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7c29f7e2-8929-47e0-8724-998132962584
+		summarizeBy: none
+		sourceColumn: Country_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column ordered_at
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 1c0b4f5b-3de8-4e52-8f9d-60c51d9de8ea
+		summarizeBy: none
+		sourceColumn: ordered_at
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column units
+		dataType: int64
+		formatString: 0
+		lineageTag: 000ca4ea-35c8-40a8-b89c-c7129b6e9440
+		summarizeBy: sum
+		sourceColumn: units
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_price_usd
+		dataType: double
+		lineageTag: 45615696-3590-49da-ae53-b7bb2bd01176
+		summarizeBy: sum
+		sourceColumn: unit_price_usd
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column discount_pct
+		dataType: double
+		lineageTag: 4ce8ae2e-7830-4dd4-ba64-2c5089510a89
+		summarizeBy: sum
+		sourceColumn: discount_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column revenue_usd
+		dataType: double
+		lineageTag: 911c9d17-d6fd-4b69-9ec1-70006c1bed86
+		summarizeBy: sum
+		sourceColumn: revenue_usd
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column returned
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 01befe4d-9901-4459-bd60-8b070bc21b02
+		summarizeBy: none
+		sourceColumn: returned
+
+		annotation SummarizationSetBy = Automatic
+
+	column Selling_Price = Fact_OrderLines[units]*Fact_OrderLines[unit_price_usd]
+		lineageTag: 9a12e0a3-b787-4125-975a-1f129857dd2c
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Actual_SaleAmount = Fact_OrderLines[Selling_Price]*(1-Fact_OrderLines[discount_pct])
+		formatString: 0.00
+		lineageTag: e3f67a37-0d59-49f1-9b3a-0a840c37c5bf
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_OrderLines = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = #"retail-orders_Jan2023-Dec2024",
+				  #"Merged queries" = Table.NestedJoin(Source, {"customer_id"}, Dim_Customer, {"customer_id"}, "Dim_Customer", JoinKind.Inner),
+				  #"Expanded Dim_Customer" = Table.ExpandTableColumn(#"Merged queries", "Dim_Customer", {"Customer_Key"}, {"Customer_Key"}),
+				  #"Merged queries 1" = Table.NestedJoin(#"Expanded Dim_Customer", {"channel"}, Dim_Channel, {"channel"}, "Dim_Channel", JoinKind.Inner),
+				  #"Expanded Dim_Channel" = Table.ExpandTableColumn(#"Merged queries 1", "Dim_Channel", {"Channel_Key"}, {"Channel_Key"}),
+				  #"Merged queries 2" = Table.NestedJoin(#"Expanded Dim_Channel", {"category"}, Dim_Category, {"category"}, "Dim_Category", JoinKind.Inner),
+				  #"Expanded Dim_Category" = Table.ExpandTableColumn(#"Merged queries 2", "Dim_Category", {"Category_Key"}, {"Category_Key"}),
+				  #"Merged queries 3" = Table.NestedJoin(#"Expanded Dim_Category", {"country"}, Dim_Location, {"country"}, "Dim_Location", JoinKind.Inner),
+				  #"Expanded Dim_Location" = Table.ExpandTableColumn(#"Merged queries 3", "Dim_Location", {"Country_Key"}, {"Country_Key"}),
+				  #"Choose columns" = Table.SelectColumns(#"Expanded Dim_Location", {"order_id", "line_no", "ordered_at", "units", "unit_price_usd", "discount_pct", "revenue_usd", "returned", "Customer_Key", "Channel_Key", "Category_Key", "Country_Key"}),
+				  #"Reordered columns" = Table.ReorderColumns(#"Choose columns", {"order_id", "line_no", "Customer_Key", "Channel_Key", "Category_Key", "Country_Key", "ordered_at", "units", "unit_price_usd", "discount_pct", "revenue_usd", "returned"}),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Reordered columns", {{"ordered_at", type date}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

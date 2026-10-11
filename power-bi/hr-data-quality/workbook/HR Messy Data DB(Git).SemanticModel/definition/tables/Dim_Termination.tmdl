@@ -1,0 +1,50 @@
+table Dim_Termination
+	lineageTag: 40f82953-0bb6-4c50-a0c1-b2ae4a7553f0
+
+	column Termination_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b238419-93d0-4164-affc-91e36071fd05
+		summarizeBy: none
+		sourceColumn: Termination_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeStatus
+		dataType: string
+		isHidden
+		lineageTag: 8c8a13f6-b4db-4c06-a247-a2de39eea628
+		summarizeBy: none
+		sourceColumn: EmployeeStatus
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TerminationType
+		dataType: string
+		lineageTag: aecdc51f-19e4-4d1a-ad36-bddedb407d1d
+		summarizeBy: none
+		sourceColumn: TerminationType
+
+		annotation SummarizationSetBy = Automatic
+
+	column TerminationDescription
+		dataType: string
+		lineageTag: 4c3c32dc-2287-4060-86ae-5969920780c0
+		summarizeBy: none
+		sourceColumn: TerminationDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Termination = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = Employee_Termination
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

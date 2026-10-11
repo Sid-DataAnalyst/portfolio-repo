@@ -1,0 +1,45 @@
+table 'Fact MonthlyTargets'
+	lineageTag: c2434dd8-ec8e-413c-8702-c66960fc2261
+
+	column StoreID
+		dataType: int64
+		formatString: 0
+		lineageTag: 8af3b84c-d05f-449e-a83a-a211d5b45718
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TargetMonth
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 28aa84e2-dede-4c2c-a5b6-21c22bd17265
+		summarizeBy: none
+		sourceColumn: TargetMonth
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column TargetRevenue
+		dataType: double
+		lineageTag: 01de5109-cb46-4116-bbb5-0855aa33a13c
+		summarizeBy: sum
+		sourceColumn: TargetRevenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Fact MonthlyTargets' = m
+		mode: import
+		queryGroup: Curated
+		source =
+				let
+				  Source = MonthlyTargets,
+				  #"Renamed columns" = Table.RenameColumns(Source, {{"TargetRevenueINR", "TargetRevenue"}})
+				in
+				  #"Renamed columns"
+
+	annotation PBI_ResultType = Table
+

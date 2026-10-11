@@ -1,0 +1,67 @@
+table DimDate
+	lineageTag: d8cfd5d8-0cb8-4b7f-9be4-8ee355074612
+
+	column Date
+		formatString: dd-mm-yyyy
+		lineageTag: cd2902df-c7d1-4758-91fd-294842e67ed1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 8fb0c31e-4121-4a7b-93da-46cfa7ebe388
+			defaultHierarchy: LocalDateTable_d59a1567-f508-4eb9-9730-4bdef90bc8fb.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Year = YEAR(DimDate[Date])
+		formatString: 0
+		lineageTag: 1e4405a4-8b0a-47e5-8627-49a9ce833c20
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month = DimDate[Date].[MonthNo]
+		formatString: 0
+		lineageTag: d9f6ad82-72d5-495c-9516-eeaf1a54f965
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName = DimDate[Date].[Month]
+		lineageTag: a4019753-2b70-4715-836d-a02fdebbcc5d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter = DimDate[Date].[QuarterNo]
+		formatString: 0
+		lineageTag: c6853aa3-da1c-46a6-b718-b517a99f5266
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Qtr = DimDate[Date].[Quarter]
+		lineageTag: 9862c88c-9e46-4e68-80c1-9eaf2814d013
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day = DAY(DimDate[Date])
+		formatString: 0
+		lineageTag: e35f5294-5969-429f-8141-1a18f39f2671
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = calculated
+		mode: import
+		source = CALENDARAUTO()
+
+	annotation PBI_Id = 30d00405d1524b06877452a86844da87
+

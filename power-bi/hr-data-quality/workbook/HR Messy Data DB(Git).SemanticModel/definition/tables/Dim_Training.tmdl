@@ -1,0 +1,82 @@
+table Dim_Training
+	lineageTag: 47941bae-a2aa-47a1-8fbc-09c57dbdec77
+
+	column Training_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 952e21dc-fdc0-4834-abbe-9bac68e06a1d
+		summarizeBy: none
+		sourceColumn: Training_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Training_Program_Name
+		dataType: string
+		lineageTag: 93e90cec-04c8-4cee-8ca4-df063b31589b
+		summarizeBy: none
+		sourceColumn: Training_Program_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Training_Type
+		dataType: string
+		lineageTag: 98aeb458-b8a9-4012-87aa-013b4bc273d7
+		summarizeBy: none
+		sourceColumn: Training_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Location
+		dataType: string
+		lineageTag: 754dc333-2274-456c-9483-cdf479cabcf3
+		summarizeBy: none
+		sourceColumn: Location
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trainer
+		dataType: string
+		lineageTag: 6ab3ae17-8870-445c-8380-dc1dc91f053a
+		summarizeBy: none
+		sourceColumn: Trainer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Training_Outcome
+		dataType: string
+		lineageTag: 06f57faa-6872-4892-afa7-e933490be963
+		summarizeBy: none
+		sourceColumn: Training_Outcome
+
+		annotation SummarizationSetBy = Automatic
+
+	column Training_Duration_Days
+		dataType: int64
+		formatString: 0
+		lineageTag: 11842933-922c-4354-8c06-1b9ff28a5910
+		summarizeBy: none
+		sourceColumn: Training_Duration_Days
+
+		annotation SummarizationSetBy = Automatic
+
+	column Training_Cost
+		dataType: double
+		lineageTag: f44646b0-eecd-43b2-9c04-5c0fbf4d672d
+		summarizeBy: none
+		sourceColumn: Training_Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Dim_Training = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = Training_Data
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

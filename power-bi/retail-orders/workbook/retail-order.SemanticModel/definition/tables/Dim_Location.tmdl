@@ -1,0 +1,36 @@
+table Dim_Location
+	lineageTag: fd9584d8-4927-4831-ad3b-889d33628e5f
+
+	column country
+		dataType: string
+		lineageTag: 88b68063-cc5d-44bf-8e5d-ce30629ced11
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: d7b9d5bf-0baa-4b87-ba19-7c111f10df30
+		summarizeBy: none
+		sourceColumn: Country_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Location = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = #"retail-orders_Jan2023-Dec2024",
+				  #"Sorted rows" = Table.Sort(Source, {{"order_id", Order.Ascending}, {"line_no", Order.Ascending}}),
+				  #"Choose columns" = Table.SelectColumns(#"Sorted rows", {"country"}),
+				  #"Removed duplicates" = Table.Distinct(#"Choose columns", {"country"}),
+				  #"Added index" = Table.AddIndexColumn(#"Removed duplicates", "Index", 1, 1, Int64.Type),
+				  #"Renamed columns" = Table.RenameColumns(#"Added index", {{"Index", "Country_Key"}})
+				in
+				  #"Renamed columns"
+
+	annotation PBI_ResultType = Table
+

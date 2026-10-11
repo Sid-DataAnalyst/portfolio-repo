@@ -1,0 +1,189 @@
+table 'Fact Orderlines'
+	lineageTag: 730792a6-8ce8-40ec-8d41-d05ab6334601
+
+	refreshPolicy
+		policyType: basic
+		rollingWindowGranularity: year
+		rollingWindowPeriods: 2
+		incrementalGranularity: day
+		incrementalPeriods: 30
+		pollingExpression = let MaxOrderDate = List.Max(#"Fact Orderlines"[OrderDate]), accountForNull = if MaxOrderDate = null then #datetime(1901, 01, 01, 00, 00, 00) else MaxOrderDate in accountForNull
+		sourceExpression =
+			let
+			  Source = #"T Orderlines",
+			  #"Changed column type" = Table.TransformColumnTypes(Source, {{"OrderDate", type datetime}}),
+			  #"Filtered rows" = Table.SelectRows(#"Changed column type", each [OrderDate] >= RangeStart and [OrderDate] < RangeEnd)
+			in
+			  #"Filtered rows"
+
+	column LineID
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d8c8063-d95f-4ee9-b0c4-6802aecef6c1
+		summarizeBy: none
+		sourceColumn: LineID
+
+		annotation SummarizationSetBy = User
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 2430bf27-f718-421e-870f-4be5757fa0d6
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = User
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 2704b57c-909b-4b5b-a4d6-a171345c6857
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 2a370b6c-c6ac-46fa-9066-a653d10e99d7
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreID
+		dataType: int64
+		formatString: 0
+		lineageTag: a9f17164-54eb-43a7-a9f0-5c9ec6644708
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: c56becc2-5a9f-45ee-98d1-b97f27b5ccb6
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c939ad85-8ca2-42a6-86cd-445a3a31b43a
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromisedDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d067ac26-6657-45e2-949d-caecb3be18fc
+		summarizeBy: none
+		sourceColumn: PromisedDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DeliveredDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 69013c12-9c67-4e2f-9a73-e9fbbd8baf9f
+		summarizeBy: none
+		sourceColumn: DeliveredDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: aec39e01-d63f-46a2-8788-b1fbe4dc7f3f
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column StandardCost
+		dataType: double
+		formatString: "₹"\ #,0.00;#,0.00\ -"₹";"₹"\ #,0.00
+		lineageTag: f12100d7-70c9-43ae-9fc9-aa82ad558105
+		summarizeBy: sum
+		sourceColumn: StandardCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column UnitPrice
+		dataType: double
+		formatString: "₹"\ #,0.00;#,0.00\ -"₹";"₹"\ #,0.00
+		lineageTag: 6e422ae3-260e-4a26-8f5c-cbc14b078a1c
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column DiscountRate
+		dataType: double
+		lineageTag: c00403ca-283e-4b66-b29a-19497cb3f518
+		summarizeBy: sum
+		sourceColumn: DiscountRate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Cost
+		dataType: double
+		formatString: "₹"\ #,0.00;#,0.00\ -"₹";"₹"\ #,0.00
+		lineageTag: c55d8e96-777e-44a0-b6f6-e1abf6f4d922
+		summarizeBy: sum
+		sourceColumn: Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column Revenue
+		dataType: double
+		formatString: "₹"\ #,0.00;#,0.00\ -"₹";"₹"\ #,0.00
+		lineageTag: 5bd07597-7b4d-4958-a5eb-bd9c7f779ffb
+		summarizeBy: sum
+		sourceColumn: Revenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column Profit
+		dataType: double
+		formatString: "₹"\ #,0.00;#,0.00\ -"₹";"₹"\ #,0.00
+		lineageTag: 8d369ed9-edd5-4497-b652-b8b51411a57c
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	partition 'Fact Orderlines' = m
+		mode: import
+		queryGroup: Curated
+		source =
+				let
+				  Source = #"T Orderlines",
+				  #"Changed column type" = Table.TransformColumnTypes(Source, {{"OrderDate", type datetime}}),
+				  #"Filtered rows" = Table.SelectRows(#"Changed column type", each [OrderDate] >= RangeStart and [OrderDate] < RangeEnd)
+				in
+				  #"Filtered rows"
+
+	annotation PBI_ResultType = Table
+

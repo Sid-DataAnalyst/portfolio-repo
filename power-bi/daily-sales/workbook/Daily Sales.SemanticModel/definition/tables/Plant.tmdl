@@ -1,0 +1,23 @@
+table Plant
+	lineageTag: 8af026d8-028d-420d-849a-d33e0b003e94
+
+	column Plant
+		dataType: string
+		lineageTag: 676e365f-537f-4db6-80e2-42b67762236e
+		summarizeBy: none
+		sourceColumn: Plant
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Plant = m
+		mode: import
+		queryGroup: Silver
+		source =
+				let
+				  Source = #"Daily Sales",
+				  #"Choose columns" = Table.SelectColumns(Source, {"Plant"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,173 @@
+expression Messy_HR_Dataset_Detailed =
+		let
+		  Source = Sql.Database("DESKTOP-UNPI7L5\SQLEXPRESS", "HR_messydataset"),
+		  #"Navigation 1" = Source{[Schema = "dbo", Item = "Messy_HR_Dataset_Detailed"]}[Data]
+		in
+		  #"Navigation 1"
+	lineageTag: 5284b444-70ab-4a71-8a8b-df93afbb15bd
+	queryGroup: Bronze
+
+	annotation PBI_ResultType = Table
+
+expression Messy_HR_Dataset =
+		let
+		  Source = Messy_HR_Dataset_Detailed,
+		  #"Reordered columns" = Table.ReorderColumns(Source, {"Unnamed_0", "Employee_ID", "FirstName", "LastName", "ADEmail", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "DepartmentType", "Division", "JobFunctionDescription", "DOB", "State", "LocationCode", "GenderCode", "RaceDesc", "MaritalDesc", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Program_Name", "Training_Type", "Training_Outcome", "Location", "Trainer", "Training_Duration_Days", "Training_Cost"}),
+		  #"Renamed columns" = Table.RenameColumns(#"Reordered columns", {{"ADEmail", "Email"}})
+		in
+		  #"Renamed columns"
+	lineageTag: 45140efb-2cd3-4c6e-ab3d-9d5e14ad857e
+	queryGroup: Silver
+
+	annotation PBI_ResultType = Table
+
+expression Fact_HR =
+		let
+		  Source = HR_Data,
+		  #"Merged queries" = Table.NestedJoin(Source, {"Employee_ID", "FirstName", "LastName", "Email", "State", "LocationCode", "GenderCode", "RaceDesc", "MaritalDesc", "DOB"}, Employee_Data, {"Employee_ID", "FirstName", "LastName", "Email", "State", "LocationCode", "GenderCode", "RaceDesc", "MaritalDesc", "DOB"}, "Employee_Data", JoinKind.Inner),
+		  #"Expanded Employee_Data" = Table.ExpandTableColumn(#"Merged queries", "Employee_Data", {"Employee_Key"}, {"Employee_Key"}),
+		  #"Reordered columns" = Table.ReorderColumns(#"Expanded Employee_Data", {"Employee_Key", "Employee_ID", "FirstName", "LastName", "Email", "State", "LocationCode", "GenderCode", "RaceDesc", "MaritalDesc", "DOB", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "DepartmentType", "Division", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Program_Name", "Training_Type", "Training_Outcome", "Location", "Trainer", "Training_Duration_Days", "Training_Cost"}),
+		  #"Choose columns" = Table.SelectColumns(#"Reordered columns", {"Employee_Key", "Employee_ID", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "DepartmentType", "Division", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Program_Name", "Training_Type", "Training_Outcome", "Location", "Trainer", "Training_Duration_Days", "Training_Cost"}),
+		  #"Sorted rows" = Table.Sort(#"Choose columns", {{"Employee_Key", Order.Ascending}}),
+		  #"Reordered columns 1" = Table.ReorderColumns(#"Sorted rows", {"Employee_Key", "Employee_ID", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "DepartmentType", "Division", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Program_Name", "Training_Type", "Location", "Trainer", "Training_Outcome", "Training_Duration_Days", "Training_Cost"}),
+		  #"Merged queries 1" = Table.NestedJoin(#"Reordered columns 1", {"Training_Program_Name", "Training_Type", "Location", "Trainer", "Training_Outcome"}, Dim_Training, {"Training_Program_Name", "Training_Type", "Location", "Trainer", "Training_Outcome"}, "Dim_Training", JoinKind.Inner),
+		  #"Expanded Dim_Training" = Table.ExpandTableColumn(#"Merged queries 1", "Dim_Training", {"Training_Key"}, {"Training_Key"}),
+		  #"Reordered columns 2" = Table.ReorderColumns(#"Expanded Dim_Training", {"Employee_Key", "Training_Key", "Employee_ID", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "DepartmentType", "Division", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Program_Name", "Training_Type", "Location", "Trainer", "Training_Outcome", "Training_Duration_Days", "Training_Cost"}),
+		  #"Choose columns 1" = Table.SelectColumns(#"Reordered columns 2", {"Employee_Key", "Training_Key", "Employee_ID", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "DepartmentType", "Division", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Duration_Days", "Training_Cost"}),
+		  #"Merged queries 2" = Table.NestedJoin(#"Choose columns 1", {"DepartmentType", "Division"}, Dim_Department, {"DepartmentType", "Division"}, "Dim_Department", JoinKind.Inner),
+		  #"Expanded Dim_Department" = Table.ExpandTableColumn(#"Merged queries 2", "Dim_Department", {"Department_Key"}, {"Department_Key"}),
+		  #"Reordered columns 3" = Table.ReorderColumns(#"Expanded Dim_Department", {"Employee_Key", "Training_Key", "Department_Key", "Employee_ID", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "DepartmentType", "Division", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Duration_Days", "Training_Cost"}),
+		  #"Choose columns 2" = Table.SelectColumns(#"Reordered columns 3", {"Employee_Key", "Training_Key", "Department_Key", "Employee_ID", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Duration_Days", "Training_Cost"}),
+		  #"Merged queries 3" = Table.NestedJoin(#"Choose columns 2", {"EmployeeStatus", "TerminationType", "TerminationDescription"}, Dim_Termination, {"EmployeeStatus", "TerminationType", "TerminationDescription"}, "Dim_Termination", JoinKind.Inner),
+		  #"Expanded Dim_Termination" = Table.ExpandTableColumn(#"Merged queries 3", "Dim_Termination", {"Termination_Key"}, {"Termination_Key"}),
+		  #"Reordered columns 4" = Table.ReorderColumns(#"Expanded Dim_Termination", {"Employee_Key", "Training_Key", "Department_Key", "Termination_Key", "Employee_ID", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Duration_Days", "Training_Cost"}),
+		  #"Choose columns 3" = Table.SelectColumns(#"Reordered columns 4", {"Employee_Key", "Training_Key", "Department_Key", "Termination_Key", "Employee_ID", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Duration_Days", "Training_Cost"}),
+		  #"Merged queries 4" = Table.NestedJoin(#"Choose columns 3", {"Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone"}, Dim_Classification, {"Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone"}, "Dim_Classification", JoinKind.Inner),
+		  #"Expanded Dim_Classification" = Table.ExpandTableColumn(#"Merged queries 4", "Dim_Classification", {"Clasification_Key"}, {"Clasification_Key"}),
+		  #"Choose columns 4" = Table.SelectColumns(#"Expanded Dim_Classification", {"Employee_Key", "Training_Key", "Department_Key", "Termination_Key", "Employee_ID", "StartDate", "EmployeeStatus", "ExitDate", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Duration_Days", "Training_Cost", "Clasification_Key"}),
+		  #"Reordered columns 5" = Table.ReorderColumns(#"Choose columns 4", {"Employee_Key", "Training_Key", "Department_Key", "Termination_Key", "Clasification_Key", "Employee_ID", "StartDate", "EmployeeStatus", "ExitDate", "JobFunctionDescription", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Duration_Days", "Training_Cost"})
+		in
+		  #"Reordered columns 5"
+	lineageTag: b439483d-c0e3-42ac-8ada-31a327b3bc08
+	queryGroup: Gold
+
+	annotation PBI_ResultType = Table
+
+expression Employee_Classification =
+		let
+		  Source = HR_Data,
+		  #"Choose columns" = Table.SelectColumns(Source, {"Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone"}),
+		  #"Sorted rows" = Table.Sort(#"Choose columns", {{"Title", Order.Ascending}}),
+		  #"Removed duplicates" = Table.Distinct(#"Sorted rows", {"Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone"}),
+		  #"Added index" = Table.AddIndexColumn(#"Removed duplicates", "Index", 1, 1, Int64.Type),
+		  #"Renamed columns" = Table.RenameColumns(#"Added index", {{"Index", "Clasification_Key"}}),
+		  #"Reordered columns" = Table.ReorderColumns(#"Renamed columns", {"Clasification_Key", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone"})
+		in
+		  #"Reordered columns"
+	lineageTag: c38a2988-35f3-4287-b381-8420713630c6
+	queryGroup: Silver
+
+	annotation PBI_ResultType = Table
+
+expression Employee_Termination =
+		let
+		  Source = HR_Data,
+		  #"Choose columns" = Table.SelectColumns(Source, {"EmployeeStatus", "TerminationType", "TerminationDescription"}),
+		  #"Removed duplicates" = Table.Distinct(#"Choose columns", {"EmployeeStatus", "TerminationType", "TerminationDescription"}),
+		  #"Sorted rows" = Table.Sort(#"Removed duplicates", {{"EmployeeStatus", Order.Descending}}),
+		  #"Added index" = Table.AddIndexColumn(#"Sorted rows", "Index", 1, 1, Int64.Type),
+		  #"Renamed columns" = Table.RenameColumns(#"Added index", {{"Index", "Termination_Key"}}),
+		  #"Reordered columns" = Table.ReorderColumns(#"Renamed columns", {"Termination_Key", "EmployeeStatus", "TerminationType", "TerminationDescription"})
+		in
+		  #"Reordered columns"
+	lineageTag: b0e07ecd-69c4-45a9-b792-7b70cbd71f71
+	queryGroup: Silver
+
+	annotation PBI_ResultType = Table
+
+expression Training_Data =
+		let
+		  Source = Messy_HR_Dataset,
+		  #"Choose columns" = Table.SelectColumns(Source, {"Training_Program_Name", "Training_Type", "Training_Outcome", "Location", "Trainer", "Training_Duration_Days", "Training_Cost"}),
+		  #"Removed duplicates" = Table.Distinct(#"Choose columns", {"Training_Program_Name", "Training_Type", "Training_Outcome", "Location", "Trainer", "Training_Duration_Days", "Training_Cost"}),
+		  #"Added index" = Table.AddIndexColumn(#"Removed duplicates", "Index", 1, 1, Int64.Type),
+		  #"Sorted rows" = Table.Sort(#"Added index", {{"Index", Order.Descending}}),
+		  #"Renamed columns" = Table.RenameColumns(#"Sorted rows", {{"Index", "Training_Key"}}),
+		  #"Reordered columns" = Table.ReorderColumns(#"Renamed columns", {"Training_Key", "Training_Program_Name", "Training_Type", "Location", "Trainer", "Training_Outcome", "Training_Duration_Days", "Training_Cost"})
+		in
+		  #"Reordered columns"
+	lineageTag: e3e0d574-a3fe-4a6d-823f-ee748800b0cb
+	queryGroup: Silver
+
+	annotation PBI_ResultType = Table
+
+expression Survey_Data =
+		let
+		  Source = Messy_HR_Dataset,
+		  #"Choose columns 1" = Table.SelectColumns(Source, {"Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score"}),
+		  #"Removed duplicates" = Table.Distinct(#"Choose columns 1", {"Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score"}),
+		  #"Added index" = Table.AddIndexColumn(#"Removed duplicates", "Index", 1, 1, Int64.Type),
+		  #"Sorted rows" = Table.Sort(#"Added index", {{"Index", Order.Ascending}}),
+		  #"Renamed columns" = Table.RenameColumns(#"Sorted rows", {{"Index", "Survey_Key"}}),
+		  #"Reordered columns" = Table.ReorderColumns(#"Renamed columns", {"Survey_Key", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score"})
+		in
+		  #"Reordered columns"
+	lineageTag: ac55bcb2-3076-4bf6-891e-c64ff2700436
+	queryGroup: Silver
+
+	annotation PBI_ResultType = Table
+
+expression Department_Data =
+		let
+		  Source = Messy_HR_Dataset,
+		  #"Choose columns" = Table.SelectColumns(Source, {"DepartmentType", "Division"}),
+		  #"Removed duplicates" = Table.Distinct(#"Choose columns", {"DepartmentType", "Division"}),
+		  #"Sorted rows" = Table.Sort(#"Removed duplicates", {{"DepartmentType", Order.Ascending}}),
+		  #"Added index" = Table.AddIndexColumn(#"Sorted rows", "Index", 1, 1, Int64.Type),
+		  #"Renamed columns" = Table.RenameColumns(#"Added index", {{"Index", "Department_Key"}}),
+		  #"Reordered columns" = Table.ReorderColumns(#"Renamed columns", {"Department_Key", "DepartmentType", "Division"})
+		in
+		  #"Reordered columns"
+	lineageTag: 90f24abd-9b57-4f20-b1f7-6145317c38ba
+	queryGroup: Silver
+
+	annotation PBI_ResultType = Table
+
+expression Employee_Data =
+		let
+		  Source = Messy_HR_Dataset,
+		  #"Choose columns" = Table.SelectColumns(Source, {"Employee_ID", "FirstName", "LastName", "Email", "DOB", "State", "LocationCode", "GenderCode", "RaceDesc", "MaritalDesc"}),
+		  #"Reordered columns" = Table.ReorderColumns(#"Choose columns", {"Employee_ID", "FirstName", "LastName", "Email", "State", "LocationCode", "GenderCode", "RaceDesc", "MaritalDesc", "DOB"}),
+		  #"Removed duplicates" = Table.Distinct(#"Reordered columns", {"Employee_ID"}),
+		  #"Sorted rows" = Table.Sort(#"Removed duplicates", {{"Employee_ID", Order.Ascending}}),
+		  #"Added index" = Table.AddIndexColumn(#"Sorted rows", "Index", 1, 1, Int64.Type),
+		  #"Renamed columns" = Table.RenameColumns(#"Added index", {{"Index", "Employee_Key"}}),
+		  #"Reordered columns 1" = Table.ReorderColumns(#"Renamed columns", {"Employee_Key", "Employee_ID", "FirstName", "LastName", "Email", "State", "LocationCode", "GenderCode", "RaceDesc", "MaritalDesc", "DOB"})
+		in
+		  #"Reordered columns 1"
+	lineageTag: 3c4966f5-d742-4f8b-b9b5-6230ceaf32d0
+	queryGroup: Silver
+
+	annotation PBI_ResultType = Table
+
+expression HR_Data =
+		let
+		  Source = Messy_HR_Dataset,
+		  #"Choose columns" = Table.SelectColumns(Source, {"Employee_ID", "FirstName", "LastName", "Email", "StartDate", "Title", "BusinessUnit", "Supervisor", "EmployeeType", "EmployeeClassificationType", "PayZone", "EmployeeStatus", "ExitDate", "TerminationType", "TerminationDescription", "DepartmentType", "Division", "JobFunctionDescription", "DOB", "State", "LocationCode", "GenderCode", "RaceDesc", "MaritalDesc", "Performance_Score", "Current_Employee_Rating", "Survey_Date", "Engagement_Score", "Satisfaction_Score", "Work_Life_Balance_Score", "Training_Date", "Training_Program_Name", "Training_Type", "Training_Outcome", "Location", "Trainer", "Training_Duration_Days", "Training_Cost"})
+		in
+		  #"Choose columns"
+	lineageTag: e4a9a3e7-c65a-49bc-8f45-527ea3897985
+	queryGroup: Silver
+
+	annotation PBI_ResultType = Table
+
+expression Dim_Survey =
+		let
+		  Source = Survey_Data
+		in
+		  Source
+	lineageTag: 8031b13f-fd49-4097-9fc3-3a99543219f7
+	queryGroup: Gold
+
+	annotation PBI_ResultType = Table
+

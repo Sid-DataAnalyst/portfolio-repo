@@ -1,0 +1,133 @@
+expression 'T Orderlines' =
+		let
+		  Source = v_Orderline_Orders,
+		  #"Renamed columns" = Table.RenameColumns(Source, {{"UnitPriceINR", "UnitPrice"}}),
+		  #"Merged queries" = Table.NestedJoin(#"Renamed columns", {"ProductID"}, #"T Products", {"ProductID"}, "T Products", JoinKind.Inner),
+		  #"Expanded T Products" = Table.ExpandTableColumn(#"Merged queries", "T Products", {"StandardCost"}, {"StandardCost"}),
+		  #"Reordered columns" = Table.ReorderColumns(#"Expanded T Products", {"LineID", "OrderID", "ProductID", "CustomerID", "StoreID", "Status", "OrderDate", "PromisedDate", "DeliveredDate", "Quantity", "StandardCost", "UnitPrice", "DiscountRate"}),
+		  #"Added custom" = Table.TransformColumnTypes(Table.AddColumn(#"Reordered columns", "Revenue", each ([Quantity]*[UnitPrice])-([Quantity]*[UnitPrice])*[DiscountRate]), {{"Revenue", type number}}),
+		  #"Added custom 1" = Table.TransformColumnTypes(Table.AddColumn(#"Added custom", "Profit", each [Revenue]-([Quantity]*[StandardCost])), {{"Profit", type number}}),
+		  #"Added custom 3" = Table.TransformColumnTypes(Table.AddColumn(#"Added custom 1", "Cost", each [Quantity] * [StandardCost]), {{"Cost", type number}})
+		in
+		  #"Added custom 3"
+	lineageTag: ed0f9bfb-61eb-454a-8a21-fd7194ee58d7
+	queryGroup: Transform
+
+	annotation PBI_ResultType = Table
+
+expression 'T Stores' =
+		let
+		  Source = v_Stores,
+		  #"Trimmed text" = Table.TransformColumns(Source, {{"StoreName", each Text.Trim(_), type nullable text}}),
+		  #"Capitalized each word" = Table.TransformColumns(#"Trimmed text", {{"StoreName", each Text.Proper(_), type nullable text}}),
+		  #"Trimmed text 1" = Table.TransformColumns(#"Capitalized each word", {{"Region", each Text.Trim(_), type nullable text}}),
+		  #"Capitalized each word 1" = Table.TransformColumns(#"Trimmed text 1", {{"Region", each Text.Proper(_), type nullable text}})
+		in
+		  #"Capitalized each word 1"
+	lineageTag: e8185291-695d-49f6-95ca-6a2d39884ca8
+	queryGroup: Transform
+
+	annotation PBI_ResultType = Table
+
+expression 'T Products' =
+		let
+		  Source = v_Products,
+		  #"Trimmed text" = Table.TransformColumns(Source, {{"ProductName", each Text.Trim(_), type nullable text}}),
+		  #"Trimmed text 1" = Table.TransformColumns(#"Trimmed text", {{"Category", each Text.Trim(_), type nullable text}}),
+		  #"Capitalized each word" = Table.TransformColumns(#"Trimmed text 1", {{"Category", each Text.Proper(_), type nullable text}}),
+		  #"Renamed columns" = Table.RenameColumns(#"Capitalized each word", {{"StandardCostINR", "StandardCost"}})
+		in
+		  #"Renamed columns"
+	lineageTag: 49b7c94e-e3ae-467f-bb27-2f7551e2ce86
+	queryGroup: Transform
+
+	annotation PBI_ResultType = Table
+
+expression 'T Customer' =
+		let
+		  Source = v_Customers,
+		  #"Trimmed text" = Table.TransformColumns(Source, {{"CustomerName", each Text.Trim(_), type nullable text}}),
+		  #"Trimmed text 1" = Table.TransformColumns(#"Trimmed text", {{"City", each Text.Trim(_), type nullable text}}),
+		  #"Capitalized each word" = Table.TransformColumns(#"Trimmed text 1", {{"City", each Text.Proper(_), type nullable text}}),
+		  #"Trimmed text 2" = Table.TransformColumns(#"Capitalized each word", {{"Segment", each Text.Trim(_), type nullable text}}),
+		  #"Capitalized each word 1" = Table.TransformColumns(#"Trimmed text 2", {{"Segment", each Text.Proper(_), type nullable text}})
+		in
+		  #"Capitalized each word 1"
+	lineageTag: 43dd346a-9643-4f22-9865-4ad63da9f375
+	queryGroup: Transform
+
+	annotation PBI_ResultType = Table
+
+expression MonthlyTargets =
+		let
+		  Source = Sql.Database("DESKTOP-UNPI7L5\SQLEXPRESS", "FabricSalesPractice_20261009"),
+		  #"Navigation 1" = Source{[Schema = "dbo", Item = "MonthlyTargets"]}[Data]
+		in
+		  #"Navigation 1"
+	lineageTag: dbebddc2-1d0a-4803-afe4-d0236fb59fef
+	queryGroup: Source
+
+	annotation PBI_ResultType = Table
+
+expression v_Customers =
+		let
+		  Source = Sql.Database("DESKTOP-UNPI7L5\SQLEXPRESS", "FabricSalesPractice_20261009"),
+		  #"Navigation 1" = Source{[Schema = "dbo", Item = "v_Customers"]}[Data]
+		in
+		  #"Navigation 1"
+	lineageTag: f2515c5b-899c-4209-a000-c49d57c7ff62
+	queryGroup: Source
+
+	annotation PBI_ResultType = Table
+
+expression v_Orderline_Orders =
+		let
+		  Source = Sql.Database("DESKTOP-UNPI7L5\SQLEXPRESS", "FabricSalesPractice_20261009"),
+		  #"Navigation 1" = Source{[Schema = "dbo", Item = "v_Orderline_Orders"]}[Data]
+		in
+		  #"Navigation 1"
+	lineageTag: 75cd9852-f3b8-4af2-b979-8ab60de172f9
+	queryGroup: Source
+
+	annotation PBI_ResultType = Table
+
+expression v_Products =
+		let
+		  Source = Sql.Database("DESKTOP-UNPI7L5\SQLEXPRESS", "FabricSalesPractice_20261009"),
+		  #"Navigation 1" = Source{[Schema = "dbo", Item = "v_Products"]}[Data]
+		in
+		  #"Navigation 1"
+	lineageTag: 949f414c-88bb-43f9-9d0e-70c1decc632e
+	queryGroup: Source
+
+	annotation PBI_ResultType = Table
+
+expression v_Stores =
+		let
+		  Source = Sql.Database("DESKTOP-UNPI7L5\SQLEXPRESS", "FabricSalesPractice_20261009"),
+		  #"Navigation 1" = Source{[Schema = "dbo", Item = "v_Stores"]}[Data]
+		in
+		  #"Navigation 1"
+	lineageTag: 93770c3c-f9e5-4918-ba6c-a0ca66de9b63
+	queryGroup: Source
+
+	annotation PBI_ResultType = Table
+
+expression RangeStart =
+		let
+		    Source = #datetime(2024, 1, 1, 0, 0, 0) meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type datetime]
+		in
+		    Source
+	lineageTag: 7f7bb9e3-8d68-447f-990a-f86b4e20b41b
+
+	annotation PBI_ResultType = DateTime
+
+expression RangeEnd =
+		let
+		    Source = #datetime(2026, 1, 10, 0, 0, 0) meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type datetime]
+		in
+		    Source
+	lineageTag: db54dd3c-ec0d-4250-a473-008444136f1e
+
+	annotation PBI_ResultType = DateTime
+

@@ -1,0 +1,117 @@
+table Fact_Training
+	lineageTag: 05078f54-fb09-430d-9cba-10a0808e5143
+
+	column Employee_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 335badde-a38a-49f9-ac4a-13520cf4b04f
+		summarizeBy: none
+		sourceColumn: Employee_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Training_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 61683d5a-d04b-4a5f-aa6e-8dcdae09cc78
+		summarizeBy: none
+		sourceColumn: Training_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 089dd6d4-dc35-4171-ad66-8b1903c2f92d
+		summarizeBy: none
+		sourceColumn: Department_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Termination_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 32bb3fe6-9c8a-443c-828f-a29a4df4e88b
+		summarizeBy: none
+		sourceColumn: Termination_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clasification_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 7bdf14f5-ec18-4ac1-bf43-c0158f189908
+		summarizeBy: none
+		sourceColumn: Clasification_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Employee_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3448b2ef-c9a4-40ce-9ca6-bdb07c8c3b00
+		summarizeBy: count
+		sourceColumn: Employee_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeStatus
+		dataType: string
+		lineageTag: 61dd3102-cd21-4788-b1f7-fa7ef1496c81
+		summarizeBy: none
+		sourceColumn: EmployeeStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column JobFunctionDescription
+		dataType: string
+		lineageTag: 1e60a004-5604-4670-a490-103b21457a98
+		summarizeBy: none
+		sourceColumn: JobFunctionDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column Training_Date
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: cb974e96-bbdb-4a9a-bb4b-7ca7e133944f
+		summarizeBy: none
+		sourceColumn: Training_Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Training_Duration_Days
+		dataType: int64
+		formatString: 0
+		lineageTag: 7f8277ff-5ed1-453b-bb7a-9b9529d760ce
+		summarizeBy: sum
+		sourceColumn: Training_Duration_Days
+
+		annotation SummarizationSetBy = Automatic
+
+	column Training_Cost
+		dataType: double
+		lineageTag: cbc2a6ae-c3a4-4d35-92ea-9e108df29630
+		summarizeBy: sum
+		sourceColumn: Training_Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Fact_Training = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = Fact_HR,
+				  #"Choose columns" = Table.SelectColumns(Source, {"Employee_Key", "Training_Key", "Department_Key", "Termination_Key", "Clasification_Key", "Employee_ID", "EmployeeStatus", "JobFunctionDescription", "Training_Date", "Training_Duration_Days", "Training_Cost"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

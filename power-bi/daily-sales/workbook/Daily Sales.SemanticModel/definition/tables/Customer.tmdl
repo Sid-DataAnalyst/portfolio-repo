@@ -1,0 +1,52 @@
+table Customer
+	lineageTag: a4654333-4a49-4ec8-b9ff-d58203aa7b7f
+
+	column 'Customer No'
+		dataType: string
+		lineageTag: ce52ec58-e4a7-4542-a503-54cc5ff759bb
+		summarizeBy: none
+		sourceColumn: Customer No
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Name'
+		dataType: string
+		lineageTag: 4fad06fe-ac84-4561-91e7-9a2e5e02a648
+		summarizeBy: none
+		sourceColumn: Customer Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cust Group'
+		dataType: string
+		lineageTag: 3336e54c-76c0-4d40-a2bf-013d7cf178e8
+		summarizeBy: none
+		sourceColumn: Cust Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Key'
+		dataType: int64
+		formatString: 0
+		lineageTag: 440a7bfc-8add-4186-9a6b-b397a6cbafc8
+		summarizeBy: none
+		sourceColumn: Customer Key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customer = m
+		mode: import
+		queryGroup: Silver
+		source =
+				let
+				  Source = #"Daily Sales",
+				  #"Choose columns" = Table.SelectColumns(Source, {"Customer No", "Customer Name", "Cust Group"}),
+				  #"Removed duplicates" = Table.Distinct(#"Choose columns", {"Customer No", "Customer Name", "Cust Group"}),
+				  #"Added index" = Table.AddIndexColumn(#"Removed duplicates", "Index", 1, 1, Int64.Type),
+				  #"Renamed columns" = Table.RenameColumns(#"Added index", {{"Index", "Customer Key"}}),
+				  #"Sorted rows" = Table.Sort(#"Renamed columns", {{"Customer Key", Order.Descending}})
+				in
+				  #"Sorted rows"
+
+	annotation PBI_ResultType = Table
+

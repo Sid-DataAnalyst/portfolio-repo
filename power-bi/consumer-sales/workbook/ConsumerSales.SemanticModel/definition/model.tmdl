@@ -1,0 +1,41 @@
+model Model
+	culture: en-IN
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-IN
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Source
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Transform
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup Curated
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["MonthlyTargets","v_Customers","v_Orderline_Orders","v_Products","v_Stores","T Orderlines","T Stores","T Products","T Customer","Fact MonthlyTargets","Dim Customer","Dim Stores","Dim Products","Fact Orderlines","_m","RangeStart","RangeEnd"]
+
+annotation PBI_ProTooling = ["DevMode","CalcGroup"]
+
+ref table DateTableTemplate_c22f2955-cc9e-4438-b70b-f841d30a6177
+ref table DimDate
+ref table 'Fact MonthlyTargets'
+ref table 'Dim Customer'
+ref table 'Dim Stores'
+ref table 'Dim Products'
+ref table 'Fact Orderlines'
+ref table _m
+ref table LocalDateTable_dd6b58f1-42a7-45ac-9c51-84b39e3edf14
+ref table 'Calculation group'
+
+ref cultureInfo en-IN
+

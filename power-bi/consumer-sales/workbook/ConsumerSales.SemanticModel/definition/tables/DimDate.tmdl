@@ -1,0 +1,42 @@
+table DimDate
+	lineageTag: 7976ed5d-5103-42b0-99f4-0e9266cdcd3c
+
+	column Date
+		formatString: dd-mm-yyyy
+		lineageTag: 414ddef8-768c-4b1c-b01c-854e9291a669
+		isDefaultLabel
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: bd1b1183-140d-47e1-8e8b-e686f1def66a
+			defaultHierarchy: LocalDateTable_dd6b58f1-42a7-45ac-9c51-84b39e3edf14.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Year = YEAR(DimDate[Date])
+		formatString: 0
+		lineageTag: a6d2447e-0042-4402-806d-2b39e5c54637
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month = MONTH(DimDate[Date])
+		formatString: 0
+		lineageTag: 74ef3d43-c0e5-469a-97d3-311fb6672726
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = calculated
+		mode: import
+		source = CALENDAR(MIN('Fact Orderlines'[OrderDate]),MAX('Fact Orderlines'[DeliveredDate]))
+
+	annotation PBI_Id = 2eea8b4d9b6e4ea49e1f54cd615202c2
+

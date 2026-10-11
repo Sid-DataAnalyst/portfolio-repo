@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "504bd3e60b4c646cbb70",
+  "position": {
+    "x": 16,
+    "y": 128,
+    "z": 0,
+    "height": 464,
+    "width": 800
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Meassure"
+                    }
+                  },
+                  "Property": "No OF Employees"
+                }
+              },
+              "queryRef": "_Meassure.NoOfEmployees",
+              "nativeQueryRef": "No OF Employees"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Meassure"
+                    }
+                  },
+                  "Property": "Active Employees"
+                }
+              },
+              "queryRef": "_Meassure.Active Employees",
+              "nativeQueryRef": "Active Employees"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Meassure"
+                    }
+                  },
+                  "Property": "Total Leavers"
+                }
+              },
+              "queryRef": "_Meassure.Total Leavers",
+              "nativeQueryRef": "Total Leavers"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Meassure"
+                    }
+                  },
+                  "Property": "Total Attrition %"
+                }
+              },
+              "queryRef": "_Meassure.Total Attrition %",
+              "nativeQueryRef": "Total Attrition %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "36D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

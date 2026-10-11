@@ -1,0 +1,138 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 446.66666666666663,
+        "y": 418.88888888888886
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 636.30575324533072,
+            "y": 207.28694067615339
+          },
+          "nodeIndex": "Dim_Classification",
+          "nodeLineageTag": "803bcd37-85ff-4b0e-977a-144746283578",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 70,
+            "y": 189.09963155150518
+          },
+          "nodeIndex": "Dim_Department",
+          "nodeLineageTag": "7ff842dc-22c7-45d4-9cc6-0406435f59f4",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 313.92258538934931,
+            "y": 192.43296488483855
+          },
+          "nodeIndex": "Dim_Employee",
+          "nodeLineageTag": "2c38d6ce-287d-4396-ad6a-dfd8c594aeb6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 15.116661900937814,
+            "y": 546.90093242214175
+          },
+          "nodeIndex": "Dim_Termination",
+          "nodeLineageTag": "40f82953-0bb6-4c50-a0c1-b2ae4a7553f0",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1047.7777777777781,
+            "y": 207.89914028684541
+          },
+          "nodeIndex": "Dim_Training",
+          "nodeLineageTag": "47941bae-a2aa-47a1-8fbc-09c57dbdec77",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 450.25467778455618,
+            "y": 561.64280413660231
+          },
+          "nodeIndex": "Fact_Employee",
+          "nodeLineageTag": "ea2c7397-5a40-4822-b9bf-c4424d85f80c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 944.58753770546173,
+            "y": 556.076930491107
+          },
+          "nodeIndex": "Fact_Training",
+          "nodeLineageTag": "05078f54-fb09-430d-9cba-10a0808e5143",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 213.03198214990618,
+            "y": 901.52185998696928
+          },
+          "nodeIndex": "DimDate",
+          "nodeLineageTag": "d8cfd5d8-0cb8-4b7f-9be4-8ee355074612",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1316.6611158768403,
+            "y": 419.24432473490037
+          },
+          "nodeIndex": "_Meassure",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 90,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

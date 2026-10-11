@@ -1,0 +1,64 @@
+relationship 32da1406-5b46-4b87-834b-da77725fd68c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Employee.DOB
+	toColumn: LocalDateTable_7345112a-3485-47ec-80f0-767b2e985338.Date
+
+relationship AutoDetected_bb2c1ea1-75ec-41f8-bf12-4586a3b159e1
+	fromColumn: Fact_Training.Employee_Key
+	toColumn: Dim_Employee.Employee_Key
+
+relationship AutoDetected_058d2cbb-646c-4d3e-a8b7-a8f693649a63
+	fromColumn: Fact_Employee.Employee_Key
+	toColumn: Dim_Employee.Employee_Key
+
+relationship AutoDetected_bc3aaec3-252d-44cd-a9e9-8038d4f85cd5
+	fromColumn: Fact_Training.Training_Key
+	toColumn: Dim_Training.Training_Key
+
+relationship AutoDetected_9219bb77-e658-480f-a34f-60f446c6ce4a
+	fromColumn: Fact_Training.Department_Key
+	toColumn: Dim_Department.Department_Key
+
+relationship AutoDetected_5d811748-ccc7-4514-b20b-babf51159a5b
+	fromColumn: Fact_Employee.Department_Key
+	toColumn: Dim_Department.Department_Key
+
+relationship AutoDetected_767f5f0d-fef0-4674-a881-d4ca54e024a3
+	fromColumn: Fact_Training.Termination_Key
+	toColumn: Dim_Termination.Termination_Key
+
+relationship AutoDetected_bf0b754b-d26a-490c-a99f-0f2bc474832e
+	fromColumn: Fact_Employee.Termination_Key
+	toColumn: Dim_Termination.Termination_Key
+
+relationship AutoDetected_d5964130-4719-4f83-91ca-e2ba77f28382
+	fromColumn: Fact_Training.Clasification_Key
+	toColumn: Dim_Classification.Clasification_Key
+
+relationship AutoDetected_ab4862f2-cc9c-4605-8ded-1d22bd05b8e0
+	fromColumn: Fact_Employee.Clasification_Key
+	toColumn: Dim_Classification.Clasification_Key
+
+relationship 8fb0c31e-4121-4a7b-93da-46cfa7ebe388
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DimDate.Date
+	toColumn: LocalDateTable_d59a1567-f508-4eb9-9730-4bdef90bc8fb.Date
+
+relationship b640e6f5-7a87-8913-53d6-7a3cac4b8706
+	fromColumn: Fact_Employee.StartDate
+	toColumn: DimDate.Date
+
+relationship f848066d-39c6-c36d-f2aa-cf7db6c89083
+	isActive: false
+	fromColumn: Fact_Employee.Survey_Date
+	toColumn: DimDate.Date
+
+relationship 16fbc5da-da09-6e94-e7e5-f05365bff363
+	isActive: false
+	fromColumn: Fact_Employee.ExitDate
+	toColumn: DimDate.Date
+
+relationship 6d797a12-af9a-3889-c944-8c8c7863dd71
+	fromColumn: Fact_Training.Training_Date
+	toColumn: DimDate.Date
+

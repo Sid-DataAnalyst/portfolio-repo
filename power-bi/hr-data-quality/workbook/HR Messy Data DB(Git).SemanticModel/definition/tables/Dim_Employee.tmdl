@@ -1,0 +1,115 @@
+table Dim_Employee
+	lineageTag: 2c38d6ce-287d-4396-ad6a-dfd8c594aeb6
+
+	column Employee_Key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1240a9d3-e976-4f31-a69e-8b8f1a40ffcd
+		summarizeBy: none
+		sourceColumn: Employee_Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Employee_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: f2a5673e-7b06-473f-bad8-1ff76b033629
+		summarizeBy: count
+		sourceColumn: Employee_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FirstName
+		dataType: string
+		lineageTag: 2cd7dff8-583d-438e-ac85-8eae8851a636
+		summarizeBy: none
+		sourceColumn: FirstName
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastName
+		dataType: string
+		lineageTag: a29bf681-79e7-4c6c-b4f6-edd8ef97c75a
+		summarizeBy: none
+		sourceColumn: LastName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: 5e815cc7-d2c8-414b-9cb6-87fe59368eaa
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 2e4e8472-39f7-496a-ac8a-13b9759479e9
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column LocationCode
+		dataType: int64
+		formatString: 0
+		lineageTag: 076608b0-b605-46dc-9a78-3c87ae218c8c
+		summarizeBy: count
+		sourceColumn: LocationCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column GenderCode
+		dataType: string
+		lineageTag: 736d60cd-f425-4e94-928a-f941fb59f81b
+		summarizeBy: none
+		sourceColumn: GenderCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column RaceDesc
+		dataType: string
+		lineageTag: 42aa68c8-12f7-47ff-b6bc-96447bbc01b0
+		summarizeBy: none
+		sourceColumn: RaceDesc
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaritalDesc
+		dataType: string
+		lineageTag: 65e6199a-abf3-481c-814d-16237dbb248a
+		summarizeBy: none
+		sourceColumn: MaritalDesc
+
+		annotation SummarizationSetBy = Automatic
+
+	column DOB
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 9b58d5b2-abc9-4343-988b-ca254811c9b7
+		summarizeBy: none
+		sourceColumn: DOB
+
+		variation Variation
+			isDefault
+			relationship: 32da1406-5b46-4b87-834b-da77725fd68c
+			defaultHierarchy: LocalDateTable_7345112a-3485-47ec-80f0-767b2e985338.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	partition Dim_Employee = m
+		mode: import
+		queryGroup: Gold
+		source =
+				let
+				  Source = Employee_Data
+				in
+				  Source
+
+	annotation PBI_ResultType = Table
+

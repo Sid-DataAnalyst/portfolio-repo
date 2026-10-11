@@ -1,0 +1,35 @@
+model Model
+	culture: en-IN
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Bronze
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Gold
+
+	annotation PBI_QueryGroupOrder = 1
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["retail-orders_Jan2023-Dec2024","Dim_Customer","Dim_Channel","Dim_Location","Dim_Category","Fact_OrderLines","Fact_Orders"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Dim_Customer
+ref table Dim_Channel
+ref table Dim_Location
+ref table Dim_Category
+ref table Fact_OrderLines
+ref table DateTableTemplate_75714342-ca80-4263-83d4-4a7a2ea46ec8
+ref table Dim_Date
+ref table LocalDateTable_3c1b1bf9-bad0-44bb-a42e-f8e0e1582980
+ref table _Measure
+
+ref cultureInfo en-IN
+
